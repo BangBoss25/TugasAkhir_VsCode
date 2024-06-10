@@ -1,4 +1,5 @@
-﻿@{
+﻿@model IEnumerable<TugasAkhir_VsCode.Models.Items>
+@{
     Layout = "_LayoutUtama";
 }
 
@@ -38,3 +39,49 @@
 		</ul>
 	</nav>
 </div>
+
+<div class="card">
+	<div class="card-body">
+
+	</div>
+</div>
+
+<div class="card" style="margin-top: 10px;">
+	<div class="dataTables_wrapper pt-2">
+		<table id="table_barang" class="table table-striped project-orders-table">
+			<thead>
+				<tr>
+					<th>No</th>
+					<th>Kode Barang</th>
+					<th>Nama Barang</th>
+					@* <th>Bahan</th>
+					<th>Ukuran</th>
+					<th>Warna Tersedia</th>
+					<th>Harga Modal (Rp)</th> *@
+					<th>Harga Jual (Rp)</th>
+					<th>Stok Barang	</th>
+					<th>Deskripsi</th>
+					<th>User Update</th>
+					<th>Tanggal Update</th>
+					<th style="text-align: center;">Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				
+			</tbody>
+		</table>
+	</div>
+</div>
+
+@section Scripts {
+	<script>
+		$(function () {
+			$('#btnMinimize').click();
+		});
+
+		//function delete(obj, id) {
+		//	console.log(id);
+		//	document.getElementById("kodeBarang").text(id);
+		//}
+	</script>
+} 
