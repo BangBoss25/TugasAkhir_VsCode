@@ -23,5 +23,49 @@
 
 <div class="card">
 	<div class="card-body">
+        @{
+            @if (!string.IsNullOrEmpty(ViewBag.Message))
+            {
+                <div class="message-box">
+                    @ViewBag.Message
+                    <script>
+                        setTimeout(() => {
+                            document.getElementById("btnBackToList").click();
+                        }, 2000);
+                    </script>
+                </div>
+            }
+            else
+            {
+                @if (!string.IsNullOrEmpty(ViewBag.Error))
+                {
+                    string[] subs = ViewBag.Error.Split(',');
+                    <div class="message-box error">
+                        <ul class="error-list">
+                            @foreach (var err in subs)
+                            {
+                                if (!string.IsNullOrEmpty(err))
+                                {
+                                    <li style="font-size: 0.9em;">@err</li>
+                                }
+                            }
+                        </ul>
+                    </div>
+                }
+            }
+        }
+        <form asp-action="Index" method="get" hidden>
+            <div class="main-form-button">
+                <button type="submit" id="btnBackToList" class="btn btn-primary mr-2">
+                    <i class="typcn typcn-document btn-icon-prepend"></i>
+                    Submit
+                </button>
+            </div>
+        </form>
+        <form>
+            <div class="row">
+
+            </div>
+        </form>
     </div>
 </div>
