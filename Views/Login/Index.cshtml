@@ -1,0 +1,40 @@
+@model TugasAkhir_VsCode.Models.Users
+
+<div class="container">
+	<!-- main content -->
+	<div class="agile_info">
+		<div class="w3l_form">
+			<div class="left_grid_info">
+				<h1>Manage Your Business Account</h1>
+				<p>Donec dictum nisl nec mi lacinia, sed maximus tellus eleifend.</p>
+				<img src="~/templateBoostrap/LayoutLogin/images/image.jpg" alt="" />
+			</div>
+		</div>
+		<div class="w3_info">
+			<h2>Login to your Account</h2>
+			<p>Enter your details to login.</p>
+			<form method="post" asp-action="Index">
+				<label>Username</label>
+				<div class="input-group">
+					<span class="fa fa-user" aria-hidden="true"></span>
+					<input type="text" asp-for="Username" class="txtUsername" placeholder="Enter Username" required="">
+				</div>
+				<label>Password</label>
+				<div class="input-group">
+					<span class="fa fa-lock" aria-hidden="true"></span>
+					<input type="Password" asp-for="Password" placeholder="Enter Password" required="">
+				</div>
+				<div class="login-check">
+					@{
+						@if (!string.IsNullOrEmpty(ViewBag.Message))
+						{
+							<p style="color: red; font-size: smaller;">@ViewBag.Message</p>
+						}
+					}
+				</div>
+				<button class="btn btn-danger btn-block" type="submit">Login</button>
+			</form>
+		</div>
+	</div>
+	<!-- main content -->
+</div>

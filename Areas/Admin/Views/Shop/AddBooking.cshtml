@@ -1,0 +1,303 @@
+@model TugasAkhir_VsCode.Models.ViewModel.BookingTransaksi;
+@{
+    Layout = "_LayoutUtama";
+}
+
+<link rel="stylesheet" href="~/css/site.css" asp-append-version="true">
+
+<div class="form-header">
+    <h1>
+        <a asp-action="Index">
+            <i class="bi bi-arrow-left-circle"></i>
+        </a>
+        Tambah Pemesanan Barang
+    </h1>
+    <nav class="breadcrumbs no-phone mini">
+        <ul>
+            <li>
+                <a>Transaksi</a>
+            </li>
+            <li>
+                <a asp-action="Index">Pemesanan Barang</a>
+            </li>
+            <li>
+                <a asp-action="AddBooking">Form Tambah Pemesanan Barang</a>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <form asp-action="AddBooking" method="POST" enctype="multipart/form-data">
+            <div class="row">
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <label>No. Pemesanan </label>
+                        <input type="text" asp-for="Booking.No_Pesanan" id="AddNoPesanan" maxlength="30" class="form-control" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>Nama Pelanggan</label>
+                        <input type="text" id="AddNama" maxlength="30" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>No. Telepon</label>
+                        <input type="text" id="AddTelp" maxlength="13" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label>Status Pemesanan</label>
+                        <select id="AddStatPemesan" class="form-control">
+                            <option value="" selected>Open this select menu</option>
+                            <option value="L">Lunas</option>
+                            <option value="BL">Belum Lunas</option>
+                            <option value="B">Batal</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <label>Provinsi </label>
+                        <select id="AddProv" class="form-control">
+                            <option value="" selected>Open this select menu</option>
+                            <option value="aceh">Aceh</option>
+                            <option value="sumut">Sumatera Utara</option>
+                            <option value="sumbar">Sumatera Barat</option>
+                            <option value="riau">Riau</option>
+                            <option value="jambi">Jambi</option>
+                            <option value="bengkulu">Bengkulu</option>
+                            <option value="sumsel">Sumatera Selatan</option>
+                            <option value="lampung">Lampung</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Kabupaten/Kota</label>
+                        <select id="AddKab" class="form-control">
+                            <option value="" selected>Open this select menu</option>
+                            <option value="L">Lunas</option>
+                            <option value="BL">Belum Lunas</option>
+                            <option value="B">Batal</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Alamat Lengkap </label>
+                        <textarea id="AddAlamat" class="form-control" maxlength="100" style="height: 138px;"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div style="text-align: right">
+                <a class="btn btn-success mr-3" data-toggle="modal" data-target="#staticBackdrop">
+                    Tambah Pesanan
+                </a>
+            </div>
+
+            <div class="table-responsive" style="padding-top: 20px;">
+                <table id="tblPesanan" class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th style="width: 13%">Kode Barang </th>
+                            <th style="width: 32%">Nama Barang </th>
+                            <th style="width: 18%">Harga (Rp)</th>
+                            <th style="width: 13%">Jumlah</th>
+                            <th style="width: 18%; text-align: center;">Total (Rp)</th>
+                            @* <th style="width: 20%">Keterangan</th> *@
+                            <th> </th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody_tblPesanan">
+                    </tbody>
+                    <tbody id="tbody_tblTtlPesanan">
+                        <tr>
+                            <td colspan="6" style='text-align: right'>
+                                <table class='table mb-0'>
+                                    <thead></thead>
+                                    <tbody>
+                                        <tr>
+                                            <th style='text-align: right; width: 80%'>Total Belanja (Rp) : </th>
+                                            <td><span id="ttlBlnj">0,00</span></td>
+                                        </tr>
+                                        <tr>
+                                            <th style='text-align: right; width: 80%'>Total Biaya Kirim (Rp) : </th>
+                                            <td>0,00</td>
+                                        </tr>
+                                        <tr>
+                                            <th style='text-align: right; width: 80%'>Total Bayar (Rp) : </th>
+                                            <td>0,00</td>
+                                        </tr>
+                                        <tr>
+                                            <th></th>
+                                            <th></th>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="main-form-button" style="text-align: end;">
+                <a onclick="submitData(this)" style="padding: 12px 15px;" class="btn btn-primary mr-2">
+                    <i class="typcn typcn-document btn-icon-prepend"></i>
+                    Simpan Data
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Barang Modal-->
+<div class="modal fade" id="staticBackdrop" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+        <div class="modal-content" style="width: 130% !important">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Table Barang</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="dataTables_wrapper pt-2">
+                    <table id="modal_tblBarang" class="table table-striped project-orders-table">
+                        <thead>
+                            <tr>
+                                <th>Kode Barang</th>
+                                <th>Nama Barang</th>
+                                <th>Harga (Rp)</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                var i = 0;
+                                @foreach (var item in Model.Item)
+                                {
+                                    var fungsi = "selectDataModal(this)";
+                                    <tr>
+                                        <td id="VCODEBRG">@item.Kode_barang</td>
+                                        <td id="VNAME">@Html.DisplayFor(modelItem => item.Nama_barang)</td>
+                                        <td id="VPRICE">@Html.DisplayFor(modelItem => item.Harga_jual)</td>
+                                        <td style="text-align: center">
+                                            <a onclick="@fungsi" class="btn-icon-text mr-1"
+                                                style="text-decoration: none; cursor: default" data-dismiss="modal">
+                                                Select
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    i++;
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        (function ($) {
+            'use strict';
+            $(function () {
+                $('#modal_tblBarang').DataTable({
+                    "aLengthMenu": [
+                        [5, 10, 25, -1],
+                        [5, 10, 25, "All"]
+                    ],
+                    "iDisplayLength": 10,
+                    "language": {
+                        search: ""
+                    },
+                    // "fixedColumns": {
+                    // 	left: 2,
+                    // 	right: 1
+                    // },
+                    // "scrollCollapse": true,
+                    // "scrollX": true,
+                    // "order": [[1, 'asc']]
+                });
+                $('#modal_tblBarang').each(function () {
+                    var datatable = $(this);
+                    // SEARCH - Add the placeholder for Search and Turn this into in-line form control
+                    var search_input = datatable.closest('.dataTables_wrapper').find('div[id$=_filter] input');
+                    search_input.attr('placeholder', 'Search');
+                    search_input.removeClass('form-control-sm');
+                    // search_input.css('display', 'none');
+                    // LENGTH - Inline-Form control
+                    var length_sel = datatable.closest('.dataTables_wrapper').find('div[id$=_length] select');
+                    length_sel.removeClass('form-control-sm');
+                });
+
+                $('#btnMinimize').click();
+            });
+        })(jQuery);
+
+        function selectDataModal(obj) {
+            var row = $(obj).closest('tr');
+            var tablePesanan = document.getElementById("tblPesanan");
+            var idBody = document.getElementById("tbody_tblPesanan");
+            var kd_brg = $('td[id="VCODEBRG"]', row).text();
+            var nm_brg = $('td[id="VNAME"]', row).text();   
+            var hrg_brg = $('td[id="VPRICE"]', row).text();
+            var rowCount = tablePesanan.rows.length;
+            var dataTbody = "";
+
+            dataTbody +=
+                "<tr>" +
+                "<td>" + kd_brg + "</td>" +
+                "<td>" + nm_brg + "</td>" +
+                "<td style='text-align: center'>Rp. " + hrg_brg + "</td>" +
+                "<td>" +
+                "<input type='text' class='form-control' id='totalPesan" + rowCount + "' onchange='totalHarga(" + rowCount + ", " + hrg_brg + ")' maxlength ='5' onkeydown='return validateInputNumber(event, this)' style='text-align: center; width: 80%; height: 2rem; padding: 0.5rem' value='1'/>" +
+                "</td>" +
+                "<td style='text-align: right'><span id='total" + rowCount + "'></span></td>" +
+                // "<td>" +
+                // 	"<textarea class='form-control' style='padding: 0.5rem; height: 65px' maxlength='30'></textarea>" +
+                // "</td>" +
+                "<td style='text-align: center'>" +
+                "<a onclick='hapusDataPesanan(this)'><i class='bi bi-trash-fill'></i></a>" +
+                "</td>" +
+                "</tr>";
+
+            // dataTbody +=
+            // 	"<tr>" +
+            // 		"<td colspan='6' style='text-align: right'>" +
+            // 			"<table class='table mb-0'>" +
+            // 				"<thead>" +
+            // 				"</thead>" +
+            // 				"<tbody>" +
+            // 					"<tr>" +
+            // 						"<th style='text-align: right; width: 80%'>Total Belanja (Rp) : </th>" +
+            // 						"<th>3.000.000 </th>"
+            // 					"</tr>" +
+            // 				"</tbody>" +
+            // 			"</table>" +
+            // 		"</td>" +
+            // 	"</tr>";
+
+            idBody.innerHTML += dataTbody;
+
+            $('#totalPesan' + rowCount).change();
+        }
+
+        function totalHarga(row, harga) {
+            var total = document.getElementById("total" + row);
+            var totalBelanja = document.getElementById("ttlBlnj");
+            var input = document.getElementById("totalPesan" + row).value;
+
+            var jumlah = input * harga;
+
+            total.innerText = "Rp. " + jumlah;
+            totalBelanja.innerText = jumlah + ",00";
+        }
+
+        function hapusDataPesanan(obj) {
+            var row = obj.parentNode.parentNode; // Mendapatkan baris yang berisi tombol yang diklik.
+            var table = row.parentNode; // Mendapatkan tabel yang berisi baris tersebut.
+            table.deleteRow(row.rowIndex - 1); // Menghapus baris berdasarkan indeks baris.
+        }
+
+    </script>
+}

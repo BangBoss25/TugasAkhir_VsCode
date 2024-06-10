@@ -1,0 +1,147 @@
+@model TugasAkhir_VsCode.Models.ViewModel.ItemVm
+
+@{
+    Layout = "_LayoutUtama";
+}
+
+<link rel="stylesheet" href="~/css/site.css" asp-append-version="true">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.9/flatpickr.min.css">
+
+<div class="form-header">
+    <h1><a asp-action="Index"><i class="bi bi-arrow-left-circle"></i></a> Add New Barang</h1>
+    <nav class="breadcrumbs no-phone mini">
+        <ul>
+            <li>
+                <a>Master</a>
+            </li>
+            <li>
+                <a asp-action="Index">Data Barang</a>
+            </li>
+            <li>
+                <a asp-action="AddItem">Form Add New Barang</a>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        @{
+            @if (!string.IsNullOrEmpty(ViewBag.Message))
+            {
+                <div class="message-box">
+                    @ViewBag.Message
+                    <script>
+                        setTimeout(() => {
+                            document.getElementById("btnBackToList").click();
+                        }, 2000);
+                    </script>
+                </div>
+            }
+            else
+            {
+                @if (!string.IsNullOrEmpty(ViewBag.Error))
+                {
+                    string[] subs = ViewBag.Error.Split(',');
+                    <div class="message-box error">
+                        <ul class="error-list">
+                            @foreach (var err in subs)
+                            {
+                                if (!string.IsNullOrEmpty(err))
+                                {
+                                    <li style="font-size: 0.9em;">@err</li>
+                                }
+                            }
+                        </ul>
+                    </div>
+                }
+            }
+        }
+        <form asp-action="Index" method="get" hidden>
+            <div class="main-form-button">
+                <button type="submit" id="btnBackToList" class="btn btn-primary mr-2">
+                    <i class="typcn typcn-document btn-icon-prepend"></i>
+                    Submit
+                </button>
+            </div>
+        </form>
+        <form asp-action="AddItem" method="POST" enctype="multipart/form-data">
+            <div class="row">
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <label>Kode Barang </label>
+                        <input type="text" asp-for="Kode_barang" maxlength="20" class="form-control" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>Nama Barang <span style="color: red">*</span></label>
+                        <input asp-for="Nama_barang" type="text" maxlength="30" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Harga Modal(Rp) <span style="color: red">*</span></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text bg-primary text-white">Rp</span>
+                            </div>
+                            <input asp-for="Harga_modal" type="text" maxlength="30" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Harga Jual <span style="color: red">*</span></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text bg-primary text-white">Rp</span>
+                            </div>
+                            <input asp-for="Harga_jual" type="text" maxlength="30" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Keterangan <span style="color: red">*</span></label>
+                        <textarea asp-for="Deskripsi" class="form-control" maxlength="100"
+                            style="height: 150px;"></textarea>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <label>Bahan </label>
+                        <input asp-for="Bahan" type="text" maxlength="100" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Warna Tersedia <span style="color: red">*</span></label>
+                        <textarea asp-for="Warna" class="form-control" maxlength="100"
+                            style="height: 100px;"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Ukuran<span style="color: red">*</span></label>
+                        <input asp-for="Ukuran" type="text" maxlength="100" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Jumlah Stok <span style="color: red">*</span></label>
+                        <input asp-for="Stok_barang" type="text" onkeydown="return validateInputNumber(event, this)"
+                            maxlength="10" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="formFile">Gambar 1</label>
+                        <div id="preview1"></div>
+                        <input type="file" id="file1" name="image1" onchange="return validateFileExt('1')"
+                            class="file-upload-default" multiple>
+                        <div class="input-group col-xs-12">
+                            <input type="text" class="form-control file-upload-info" disabled=""
+                                placeholder="Upload Image (jpeg/ jpg/ png)">
+                            <span class="input-group-append">
+                                <button class="file-upload-browse btn btn-primary" type="button">Upload</button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="main-form-button">
+                <button type="submit" style="padding: 12px 15px;" class="btn btn-primary mr-2">
+                    <i class="typcn typcn-document btn-icon-prepend"></i>
+                    Submit
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="~/js/site.js" asp-append-version="true"></script>

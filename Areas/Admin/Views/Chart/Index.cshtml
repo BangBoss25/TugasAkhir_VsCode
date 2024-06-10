@@ -1,0 +1,42 @@
+@{
+    Layout = "_LayoutUtama";
+}
+
+<link rel="stylesheet" href="~/css/site.css" asp-append-version="true">
+
+<div class="form-header">
+    <h1>
+        <i class="bi bi-journals"></i>
+        Grafik Penjualan
+    </h1>
+    <nav class="breadcrumbs no-phone mini">
+        <ul>
+            <li>
+                <a>Data Grafik</a>
+            </li>
+            <li>
+                <a asp-action="Index">Data Barang</a>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <h4 class="card-title">Line chart</h4>
+        <canvas id="lineChart"></canvas>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(function () {
+            $('#btnMinimize').click();
+        });
+
+        //function delete(obj, id) {
+        //	console.log(id);
+        //	document.getElementById("kodeBarang").text(id);
+        //} 
+    </script>
+}

@@ -1,0 +1,175 @@
+@model IEnumerable<TugasAkhir_VsCode.Models.Items>
+@{
+	Layout = "_LayoutUtama";
+}
+
+<link rel="stylesheet" href="~/css/site.css" asp-append-version="true">
+
+<style>
+	th, td {
+		white-space: nowrap;
+	}
+
+	div.dataTables_wrapper {
+		width: 100%;
+		margin: 0 auto;
+		padding: 0px 5px 5px 5px;
+	}
+
+	th, td.dtfc-fixed-right {
+		right: -0.2px !important;
+	}
+</style>
+
+<div class="form-header">
+	<h1>
+		<i class="bi bi-journals"></i>
+		Data Barang
+	</h1>
+	<nav class="breadcrumbs no-phone mini">
+		<ul>
+			<li>
+				<a>Master</a>
+			</li>
+			<li>
+				<a asp-action="Index">Data Barang</a>
+			</li>
+		</ul>
+	</nav>
+</div>
+
+@* <div class="col-14 grid-margin stretch-card" style="margin-bottom: 1rem !important;">
+	<div class="card" style="border-left: 5px solid #FF4000; background-color: #FFEFBF;">
+		<div class="card-body" style="padding: 10px 10px 10px 10px;">
+			<form asp-action="Index" method="get" class="forms-sample">
+				<div class="row" style="margin-bottom: -1rem;">
+					<div class="col-md-4">
+						<div class="form-group">
+							<label for="search_kodeBarang">Kode Barang</label>
+							<input type="text" class="form-control" id="search_kodeBarang" value="@ViewData["FilterKodeBarang"]" placeholder="Name">
+						</div>
+					</div>
+				</div>
+				<div class="row" style="margin-bottom: -1rem;">
+					<div class="col-md-4">
+						<div class="form-group">
+							<label for="search_namaBarang">Nama Barang</label>
+							<input type="text" class="form-control" id="search_namaBarang" value="@ViewData["FilterNamaBarang"]" placeholder="Nama Barang">
+						</div>
+					</div>
+				</div>
+				<div style="margin-top: 1rem;">
+					<button type="submit" class="btn btn-primary mr-2">
+						<i class="bi bi-search"></i>
+						Search
+					</button>
+					<button class="btn btn-danger" onclick="btnReset(this)">
+						<i class="typcn typcn-refresh-outline btn-icon-prepend"></i>
+						Reset
+					</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div> *@
+
+<div style="text-align: right;">
+	<a asp-action="AddItem" class="btn btn-primary mr-2">
+		<i class="bi bi-plus-circle-fill"></i> Tambah Barang
+	</a>
+</div>
+
+<div class="card" style="margin-top: 10px;">
+	<div class="dataTables_wrapper pt-2">
+		<table id="table_barang" class="table table-striped project-orders-table">
+			<thead>
+				<tr>
+					<th>No</th>
+					<th>Kode Barang</th>
+					<th>Nama Barang</th>
+					@* <th>Bahan</th>
+					<th>Ukuran</th>
+					<th>Warna Tersedia</th>
+					<th>Harga Modal (Rp)</th> *@
+					<th>Harga Jual (Rp)</th>
+					<th>Stok Barang	</th>
+					<th>Deskripsi</th>
+					<th>User Update</th>
+					<th>Tanggal Update</th>
+					<th style="text-align: center;">Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				@{
+					var i = 0;
+					foreach (var item in Model)
+					{
+						var username = item.VMODI;
+						i++;
+						<tr>
+							<td>@i</td>
+							<td>@item.Kode_barang</td>
+							@* <td style="display: none;">@item.Kode_barang</td>	 *@
+							<td>@item.Nama_barang</td>					
+							@* <td>@item.Bahan</td>
+							<td>@item.Ukuran</td>
+							<td>@item.Warna</td>
+							<td style="text-align: right;">@item.Harga_modal</td> *@
+							<td style="text-align: right;">@item.Harga_jual</td>
+							<td style="text-align: right;">@item.Stok_barang</td>
+							<td>@item.Deskripsi</td>
+							<td style="text-align: center;">@item.VMODI</td>
+							<td style="text-align: center;">@item.DMODI.ToString("dd-MMM-yyyy")</td>
+							<td>
+								<div class="d-flex align-items-center" style="justify-content: space-between;">
+									<a asp-action="EditItem" asp-route-id="@item.Kode_barang" title="Edit" style="font-size: 25px;">
+										<i class="typcn typcn-edit btn-icon-append"></i>
+									</a>
+									<a data-toggle="modal" data-target="#@item.Kode_barang" title="Delete" style="font-size: 25px;">
+										<i class="typcn typcn-trash"></i>
+									</a>
+									<a asp-action="DetailItem" asp-route-id="@item.Kode_barang" title="Detail" style="font-size: 20px;">
+										<i class="typcn typcn-th-list-outline"></i>
+									</a>
+								</div>
+							</td>
+						</tr>
+
+						@* <!-- Delete Modal --> *@
+						<div class="modal fade" id="@item.Kode_barang" tabindex="-1" aria-labelledby="exampleModalLabel"
+							aria-hidden="true">
+							<div class="modal-dialog" role="document">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h5 class="modal-title" id="exampleModalLabel">Remove Item</h5>
+										<button class="close" type="button" data-dismiss="modal" aria-label="Close">
+											<span aria-hidden="true">×</span>
+										</button>
+									</div>
+									<div class="modal-body">Apakah Anda yakin ingin menghapus Barang "@item.Nama_barang" ?</div>
+									<div class="modal-footer">
+										<button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+										<a id="modalDelete" class="btn btn-danger" asp-action="DeleteItem" asp-route-id="@item.Kode_barang">Delete</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					}
+				}
+			</tbody>
+		</table>
+	</div>
+</div> 
+	
+@section Scripts {
+	<script>
+		$(function() {
+			$('#btnMinimize').click();
+		});
+
+		//function delete(obj, id) {
+		//	console.log(id);
+		//	document.getElementById("kodeBarang").text(id);
+		//} 
+	</script>
+} 

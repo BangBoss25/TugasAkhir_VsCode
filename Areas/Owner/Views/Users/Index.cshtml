@@ -1,0 +1,106 @@
+@{
+    Layout = "_LayoutUtama";
+}
+
+<link rel="stylesheet" href="~/css/site.css" asp-append-version="true">
+
+<style>
+    th,
+    td {
+        white-space: nowrap;
+    }
+
+    div.dataTables_wrapper {
+        width: 100%;
+        margin: 0 auto;
+        padding: 0px 5px 5px 5px;
+    }
+
+    th,
+    td.dtfc-fixed-right {
+        right: -0.2px !important;
+    }
+</style>
+
+<div class="form-header">
+	<h1>
+		<i class="bi bi-person-workspace"></i>
+		Master User
+	</h1>
+	<nav class="breadcrumbs no-phone mini">
+		<ul>
+			<li>
+				<a>Master</a>
+			</li>
+			<li>
+				<a asp-action="Index">Master User</a>
+			</li>
+		</ul>
+	</nav>
+</div>
+
+<div style="text-align: right;">
+	<a asp-action="AddUser" class="btn btn-primary mr-2">
+		<i class="bi bi-plus-circle-fill"></i> Tambah Akun
+	</a>
+</div>
+
+<div class="card" style="margin-top: 10px;">
+	<div class="dataTables_wrapper pt-2">
+		<table id="tblUsers" class="table table-striped project-orders-table">
+            <thead>
+                <tr>
+                    <th>User ID</th>
+                    <th>Username</th>
+                    <th>Tanggal Aktif</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+            </tbody>
+        </table>
+	</div>
+</div>
+
+@section Scripts {
+	<script>
+		(function ($) {
+            'use strict';
+            $(function () {
+                $('#tblUsers').DataTable({
+                    "aLengthMenu": [
+                        [5, 10, 25, -1],
+                        [5, 10, 25, "All"]
+                    ],
+                    "iDisplayLength": 10,
+                    "language": {
+                        search: ""
+                    },
+                    // "fixedColumns": {
+                    // 	left: 2,
+                    // 	right: 1
+                    // },
+                    // "scrollCollapse": true,
+                    // "scrollX": true,
+                    "order": [[1, 'asc']]
+                });
+                $('#tblUsers').each(function () {
+                    var datatable = $(this);
+                    // SEARCH - Add the placeholder for Search and Turn this into in-line form control
+                    var search_input = datatable.closest('.dataTables_wrapper').find('div[id$=_filter] input');
+                    search_input.attr('placeholder', 'Search');
+                    search_input.css('padding', '10px');
+                    // search_input.removeClass('form-control-sm');
+                    // search_input.css('display', 'none');
+                    // LENGTH - Inline-Form control
+                    var length_sel = datatable.closest('.dataTables_wrapper').find('div[id$=_length] select');
+                    length_sel.removeClass('form-control-sm');
+                });
+
+                $('#btnMinimize').click();
+            });
+        })(jQuery);
+	</script>
+} 

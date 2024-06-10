@@ -1,0 +1,35 @@
+@{
+    Layout = "_LayoutUtama";
+}
+
+<link rel="stylesheet" href="~/css/site.css" asp-append-version="true">
+
+<div class="form-header">
+	<h1>
+		<i class="bi bi-person-lines-fill"></i>
+		My Profile
+	</h1>
+	<nav class="breadcrumbs no-phone mini">
+		<ul>
+			<li>
+				<a>User Profile</a>
+			</li>
+			<li>
+				<a asp-action="Index">My Profile</a>
+			</li>
+		</ul>
+	</nav>
+</div>
+
+@section Scripts {
+	<script>
+		$(function() {
+			$('#btnMinimize').click();
+		});
+
+		//function delete(obj, id) {
+		//	console.log(id);
+		//	document.getElementById("kodeBarang").text(id);
+		//} 
+	</script>
+} 
