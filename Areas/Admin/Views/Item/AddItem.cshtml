@@ -77,7 +77,7 @@
                         <input asp-for="Nama_barang" type="text" maxlength="30" class="form-control">
                     </div>
                     <div class="form-group">
-                        <label>Harga Modal(Rp) <span style="color: red">*</span></label>
+                        <label>Harga Modal (Rp) <span style="color: red">*</span></label>
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text bg-primary text-white">Rp</span>
@@ -86,7 +86,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label>Harga Jual <span style="color: red">*</span></label>
+                        <label>Harga Jual (Rp) <span style="color: red">*</span></label>
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text bg-primary text-white">Rp</span>
@@ -105,7 +105,7 @@
                         <label>Bahan </label>
                         <input asp-for="Bahan" type="text" maxlength="100" class="form-control">
                     </div>
-                    <div class="form-group">
+                    @* <div class="form-group">
                         <label>Warna Tersedia <span style="color: red">*</span></label>
                         <textarea asp-for="Warna" class="form-control" maxlength="100"
                             style="height: 100px;"></textarea>
@@ -113,7 +113,7 @@
                     <div class="form-group">
                         <label>Ukuran<span style="color: red">*</span></label>
                         <input asp-for="Ukuran" type="text" maxlength="100" class="form-control">
-                    </div>
+                    </div> *@
                     <div class="form-group">
                         <label>Jumlah Stok <span style="color: red">*</span></label>
                         <input asp-for="Stok_barang" type="text" onkeydown="return validateInputNumber(event, this)"

@@ -56,4 +56,11 @@ public class ShopController : Controller
         return View(objData);
     }
 
+    //[HttpPost, ActionName("add-Pesanan")]
+    //public async Task<IActionResult> AddBooking([FromBody] Dictionary<string, object> params)
+    //{
+
+    //    return Ok();
+    //}
+
 }

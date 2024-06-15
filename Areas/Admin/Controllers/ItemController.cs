@@ -77,8 +77,8 @@ public class ItemController : Controller
         if (valItemModal == "") { ViewBag.Error += "Field Harga Modal is required,"; validation = false; }
         if (valItemJual == "") { ViewBag.Error += "Field Harga Jual is required,"; validation = false; }
         if (valItemStok == "") { ViewBag.Error += "Field Stok Barang is required,"; validation = false; }
-        if (valItemWarna == "") { ViewBag.Error += "Field Warna Tersedia is required,"; validation = false; }
-        if (valItemUkuran == "") { ViewBag.Error += "Field Ukuran is required,"; validation = false; }
+        //if (valItemWarna == "") { ViewBag.Error += "Field Warna Tersedia is required,"; validation = false; }
+        //if (valItemUkuran == "") { ViewBag.Error += "Field Ukuran is required,"; validation = false; }
         if (valItemDeskripsi == "") { ViewBag.Error += "Field Keterang is required,"; validation = false; }
 
         if (validation)
