@@ -21,7 +21,7 @@
                 <a asp-action="Index">Pemesanan Barang</a>
             </li>
             <li>
-                <a asp-action="AddBooking">Form Detail Transaksi Pemesanan</a>
+                <a asp-action="DetailBooking">Form Detail Transaksi Pemesanan</a>
             </li>
         </ul>
     </nav>
@@ -29,5 +29,423 @@
 
 <div class="card">
     <div class="card-body">
+        <div class="message-box" style="display: none;">
+            Data has been Saved Successfully
+        </div>
+        <form asp-action="Index" method="get" hidden>
+            <div class="main-form-button">
+                <button type="submit" id="btnBackToList" class="btn btn-primary mr-2">
+                    <i class="typcn typcn-document btn-icon-prepend"></i>
+                    Submit
+                </button>
+            </div>
+        </form>
+        <form method="POST" enctype="multipart/form-data">
+            <div class="row">
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <label>No. Pemesanan </label>
+                        <input type="text" asp-for="Order.NoTransaksi" id="DetailNoPesanan" maxlength="30" class="form-control" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>Nama Pelanggan</label>
+                        <input type="text" asp-for="Order.Nama" id="DetailNama" maxlength="30" class="form-control" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>No. Telepon</label>
+                        <input type="text" asp-for="Order.NoTelp" id="DetailTelp" maxlength="13" class="form-control" readonly />
+                    </div>
+                    <div class="form-group">
+                        <label>Status Pemesanan</label>
+                        <select asp-for="Order.Stat" id="DetailStatPemesanan" class="form-control">
+                            <option value="" selected>Open this select menu</option>
+                            <option value="Dipesan">Dipesan</option>
+                            <option value="Diproses">Diproses</option>
+                            <option value="Dikirim">Dikirim</option>
+                            <option value="Selesai">Selesai</option>
+                            <option value="Dibatalkan">Dibatalkan</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Status Pembayaran</label>
+                        <select asp-for="Order.StatBayar" id="DetailStatPembayaran" class="form-control">
+                            <option value="" selected>Open this select menu</option>
+                            <option value="Lunas">Lunas</option>
+                            <option value="Belumlunas">Belum Lunas</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <label>Provinsi </label>
+                        <select asp-for="Order.Prov" id="DetailProv" onchange="updateCities()" class="form-control">
+                            <option value="" selected>Pilih Provinsi</option>
+                            <option value="Aceh">Aceh</option>
+                            <option value="SumateraUtara">Sumatera Utara</option>
+                            <option value="SumateraBarat">Sumatera Barat</option>
+                            <option value="Riau">Riau</option>
+                            <option value="SumateraSelatan">Sumatera Selatan</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Kabupaten/Kota</label>
+                        <select asp-for="Order.Kota" id="DetailKab" class="form-control">
+                            <option value="" selected>Pilih Kota</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Alamat Lengkap </label>
+                        <textarea asp-for="Order.Alamat" id="DetailAlamat" class="form-control" maxlength="100" style="height: 138px;"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Jumlah Yang Dibayar (Rp)</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text bg-primary text-white">Rp</span>
+                            </div>
+                            <input asp-for="Order.JmlBayar" id="DetailJmlBayar" type="text" maxlength="30" class="form-control">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="text-align: right">
+                <a class="btn btn-success mr-3" data-toggle="modal" data-target="#staticBackdrop">
+                    Tambah Pesanan
+                </a>
+            </div>
+
+            <div class="table-responsive" style="padding-top: 20px;">
+                <table id="tblDetailPesanan" class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th style="width: 13%">Kode Barang </th>
+                            <th style="width: 32%">Nama Barang </th>
+                            <th style="width: 18%">Harga (Rp)</th>
+                            <th style="width: 13%">Jumlah</th>
+                            <th style="width: 18%; text-align: center;">Total (Rp)</th>
+                            <th> </th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody_tblPesanan">
+                    </tbody>
+                    <tbody id="tbody_tblTtlPesanan">
+                        <tr>
+                            <td colspan="6" style='text-align: right'>
+                                <table class='table mb-0'>
+                                    <thead></thead>
+                                    <tbody>
+                                        <tr>
+                                            <th style='text-align: right; width: 80%'>Total Belanja (Rp) : </th>
+                                            <td><span id="detailTotalBelanja">0</span></td>
+                                        </tr>
+                                        <tr>
+                                            <th style='text-align: right; width: 80%'>Total Biaya Kirim (Rp) : </th>
+                                            <td>0</td>
+                                        </tr>
+                                        <tr>
+                                            <th style='text-align: right; width: 80%'>Total Bayar (Rp) : </th>
+                                            <td><span id="detailTotalBayar">0</span></td>
+                                        </tr>
+                                        <tr>
+                                            <th></th>
+                                            <th></th>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="main-form-button" style="text-align: end;">
+                <a onclick="submitData(this)" style="padding: 12px 15px;" class="btn btn-primary mr-2">
+                    <i class="typcn typcn-document btn-icon-prepend"></i>
+                    Simpan Data
+                </a>
+            </div>
+        </form>
     </div>
 </div>
+
+<!-- Barang Modal-->
+<div class="modal fade" id="staticBackdrop" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+        <div class="modal-content" style="width: 130% !important">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Table Barang</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="dataTables_wrapper pt-2">
+                    <table id="modal_tblBarang" class="table table-striped project-orders-table">
+                        <thead>
+                            <tr>
+                                <th>Kode Barang</th>
+                                <th>Nama Barang</th>
+                                <th>Harga (Rp)</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                var i = 0;
+                                                @foreach (var item in Model.Item)
+                                {
+                                    var fungsi = "selectDataModal(this)";
+
+                                                    <tr>
+                                                        <td id="VCODEBRG">@item.Kode_barang</td>
+                                                        <td id="VNAME">@Html.DisplayFor(modelItem => item.Nama_barang)</td>
+                                                        <td id="VPRICE" style='text-align: center'>@Html.DisplayFor(modelItem => item.Harga_jual)</td>
+                                                        <td style="text-align: center">
+                                                            <a onclick="@fungsi" class="btn-icon-text mr-1"
+                                                               style="text-decoration: none; cursor: default" data-dismiss="modal">
+                                                                Select
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                    i++;
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/js/site.js" asp-append-version="true"></script>
+
+@section Scripts{
+    <script>
+        const orderTable = document.getElementById("tblDetailPesanan");
+        const totalBelanjaEl = document.getElementById("detailTotalBelanja");
+        // const totalBiayaKirimEl = document.getElementById("totalBiayaKirim");
+        const totalBayarEl = document.getElementById("detailTotalBayar");
+
+        document.addEventListener('DOMContentLoaded', (event) => { 
+            var orderItems = @Html.Raw(Json.Serialize(Model.Order.Items));
+
+            var tbody = document.getElementById('tbody_tblPesanan');
+
+            orderItems.forEach(item => {
+                var html = "";
+                
+                html +=
+                    "<tr>" +
+                    "<td>" + item.kodeBarang + "</td>" +
+                    "<td>" + item.namaBarang + "</td>" +
+                    "<td>" + formatRupiah(item.harga, 'Rp. ') + "</td>" +
+                    "<td>" +
+                    "<input type='text' class='form-control' onchange='updateTotals()' maxlength ='5' onkeydown='return validateInputNumber(event, this)' style='text-align: center; width: 80%; height: 2rem; padding: 0.5rem' value='" + item.jumlah + "'/>" +
+                    "</td>" +
+                    "<td style='text-align: right'><span>" + item.total + "</span></td>" +
+                    "<td style='text-align: center'>" +
+                        "<a onclick='hapusDataPesanan(this)'><i class='bi bi-trash-fill'></i></a>" +
+                    "</td>" +
+                    "</tr>";
+
+                tbody.innerHTML += html;
+
+                updateTotals();
+            });
+
+        });
+
+
+        (function ($) {
+            'use strict';
+            $(function () {
+                $('#modal_tblBarang').DataTable({
+                    "aLengthMenu": [
+                        [5, 10, 25, -1],
+                        [5, 10, 25, "All"]
+                    ],
+                    "iDisplayLength": 10,
+                    "language": {
+                        search: ""
+                    },
+                    // "fixedColumns": {
+                    // 	left: 2,
+                    // 	right: 1
+                    // },
+                    // "scrollCollapse": true,
+                    // "scrollX": true,
+                    // "order": [[1, 'asc']]
+                });
+                $('#modal_tblBarang').each(function () {
+                    var datatable = $(this);
+                    // SEARCH - Add the placeholder for Search and Turn this into in-line form control
+                    var search_input = datatable.closest('.dataTables_wrapper').find('div[id$=_filter] input');
+                    search_input.attr('placeholder', 'Search');
+                    search_input.removeClass('form-control-sm');
+                    // search_input.css('display', 'none');
+                    // LENGTH - Inline-Form control
+                    var length_sel = datatable.closest('.dataTables_wrapper').find('div[id$=_length] select');
+                    length_sel.removeClass('form-control-sm');
+                });
+
+                $('#btnMinimize').click();
+            });
+        })(jQuery);
+
+        function updateCities() {
+            const provinsiSelect = document.getElementById("DetailProv");
+            const kotaSelect = document.getElementById("DetailKab");
+            const provinsi = provinsiSelect.value;
+
+            const kotaOptions = {
+                Aceh: ["Banda Aceh", "Langsa", "Lhokseumawe", "Meulaboh", "Sabang"],
+                SumateraUtara: ["Medan", "Binjai", "Pematang Siantar", "Tebing Tinggi", "Tanjung Balai"],
+                SumateraBarat: ["Padang", "Bukittinggi", "Payakumbuh", "Solok", "Pariaman"],
+                Riau: ["Pekanbaru", "Dumai", "Siak", "Bengkalis", "Rengat"],
+                SumateraSelatan: ["Palembang", "Lubuklinggau", "Pagaralam", "Prabumulih", "Baturaja"]
+            };
+
+            while (kotaSelect.options.length > 1) {
+                kotaSelect.remove(1);
+            }
+
+            if (provinsi && kotaOptions[provinsi]) {
+                const cities = kotaOptions[provinsi];
+                cities.forEach(function (city) {
+                    const option = document.createElement("option");
+                    option.value = city;
+                    option.text = city;
+                    kotaSelect.add(option);
+                });
+            }
+        }
+
+        function selectDataModal(obj) {
+            var row = $(obj).closest('tr');
+            var idBody = document.getElementById("tbody_tblPesanan");
+            var kd_brg = $('td[id="VCODEBRG"]', row).text();
+            var nm_brg = $('td[id="VNAME"]', row).text();
+            var hrg_brg = $('td[id="VPRICE"]', row).text();
+            var rowCount = orderTable.rows.length;
+            var dataTbody = "";
+
+            var cek = 0;
+            const rows = orderTable.getElementsByTagName("tbody")[0].getElementsByTagName("tr");
+            for (let i = 0; i < rows.length; i++) {
+                const cells = rows[i].getElementsByTagName('td');
+                if (cells[0].innerText == kd_brg) {
+                    cek += 1;
+                    var jml = parseInt(cells[3].getElementsByTagName('input')[0].value, 10) + 1;
+                    cells[3].getElementsByTagName('input')[0].value = jml;
+                }
+            }
+
+            if (cek == 0) {
+                dataTbody +=
+                    "<tr>" +
+                    "<td>" + kd_brg + "</td>" +
+                    "<td>" + nm_brg + "</td>" +
+                    "<td style='text-align: center'>Rp. " + formatRupiah(hrg_brg, undefined) + "</td>" +
+                    "<td>" +
+                    "<input type='text' class='form-control' id='totalPesan" + rowCount + "' onchange='updateTotals()' maxlength ='5' onkeydown='return validateInputNumber(event, this)' style='text-align: center; width: 80%; height: 2rem; padding: 0.5rem' value='1'/>" +
+                    "</td>" +
+                    "<td style='text-align: right'><span id='total" + rowCount + "'></span></td>" +
+                    "<td style='text-align: center'>" +
+                    "<a onclick='hapusDataPesanan(this)'><i class='bi bi-trash-fill'></i></a>" +
+                    "</td>" +
+                    "</tr>";
+
+                idBody.innerHTML += dataTbody;
+            }
+
+            updateTotals();
+        }
+
+        function hapusDataPesanan(obj) {
+            var row = obj.parentNode.parentNode; // Mendapatkan baris yang berisi tombol yang diklik.
+            var table = row.parentNode; // Mendapatkan tabel yang berisi baris tersebut.
+            table.deleteRow(row.rowIndex - 1); // Menghapus baris berdasarkan indeks baris.
+
+            updateTotals();
+        }
+
+        function updateTotals() {
+            let totalBelanja = 0;
+            const rows = orderTable.getElementsByTagName("tbody")[0].getElementsByTagName("tr");
+
+            for (let i = 0; i < rows.length; i++) {
+                const cells = rows[i].getElementsByTagName("td");
+                const harga = parseInt(cells[2].innerText.replace(/[^0-9]/g, ''), 10);
+                const jumlah = parseInt(cells[3].getElementsByTagName("input")[0].value, 10);
+                const total = harga * jumlah;
+                cells[4].innerText = formatRupiah(total, 'Rp. ');
+                totalBelanja += total;
+            }
+
+            // const totalBiayaKirim = parseInt(totalBiayaKirimEl.innerText.replace(/[^0-9]/g, ''), 10);
+            // const totalBayar = totalBelanja + totalBiayaKirim;
+
+            totalBelanjaEl.innerText = formatRupiah(totalBelanja, undefined);
+            totalBayarEl.innerText = formatRupiah(totalBelanja, undefined);
+        }
+
+        function submitData(obj) {
+            const messageBox = document.querySelector(".message-box");
+            const rows = orderTable.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+            let dataTbl = [];
+
+            for (let i = 0; i < rows.length; i++) {
+                const cells = rows[i].getElementsByTagName('td');
+                const item = {
+                    KodeBarang: cells[0].innerText,
+                    NamaBarang: cells[1].innerText,
+                    Harga: parseInt(cells[2].innerText.replace(/[^0-9]/g, ''), 10),
+                    Jumlah: parseInt(cells[3].getElementsByTagName('input')[0].value, 10),
+                    Total: parseInt(cells[4].innerText.replace(/[^0-9]/g, ''), 10)
+                };
+                dataTbl.push(item);
+            }
+
+            const totalBelanja = parseInt(totalBayarEl.innerText.replace(/[^0-9]/g, ''), 10);
+
+            var param = {
+                NoTransaksi: $('#DetailNoPesanan').val(),
+                Nama: $('#DetailNama').val(),
+                Alamat: $('#DetailAlamat').val(),
+                Prov: $('#DetailProv').val(),
+                Kota: $('#DetailKab').val(),
+                NoTelp: $('#DetailTelp').val(),
+                Stat: $('#DetailStatPemesanan').val(),
+                StatBayar: $('#DetailStatPembayaran').val(),
+                JmlBayar: $('#DetailJmlBayar').val(),
+                TotalBelanja: totalBelanja,
+                Items: dataTbl
+            };
+
+            $.ajax({
+                url: '/Admin/Shop/update-pesanan',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(param),
+                success: function (response) {
+                    console.log(response);
+                    if (response.status == "1") {
+                        window.scrollTo(0, 0);
+                        messageBox.style.display = 'block';
+                        setTimeout(() => {
+                            document.getElementById("btnBackToList").click();
+                        }, 2000);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                    alert("Gagal Update Data, No Invoice salah atau ada data yang tidak sesuai")
+                }
+            });
+        }
+            
+    </script>
+}

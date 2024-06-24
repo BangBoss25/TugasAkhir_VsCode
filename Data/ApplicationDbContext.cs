@@ -13,7 +13,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<Roles> tb_roles { get; }
     public DbSet<Users> tb_users { get; set; }
     public DbSet<Items> tb_items { get; set; }
-    public DbSet<Booking> tb_bookings { get; set;}
+    //public DbSet<Booking> tb_bookings { get; set;}
 	public DbSet<Transaction> tb_pemesanan { get; set; }
 	public DbSet<TransactionItems> tb_pemesanan_item { get; set; }
 

@@ -11,7 +11,9 @@ namespace TugasAkhir_VsCode.Models
 		public string? provinsi { get; set; }
 		public string? kota { get; set; }
 		public string? no_telp { get; set; }
-		public string? status_bayar {  get; set; }
+        public string? status_pemesanan { get; set; }
+        public string? status_bayar {  get; set; }
+		public int total_bayar { get; set; }
 		public int total { get; set; }
 		public DateTime tanggal_pemesanan { get; set; }
 	}

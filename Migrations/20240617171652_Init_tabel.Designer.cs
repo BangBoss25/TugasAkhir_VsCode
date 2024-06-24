@@ -11,8 +11,8 @@ using TugasAkhir_VsCode.Data;
 namespace TugasAkhir_VsCode.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240202130326_Init table Database")]
-    partial class InittableDatabase
+    [Migration("20240617171652_Init_tabel")]
+    partial class Init_tabel
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -81,6 +81,73 @@ namespace TugasAkhir_VsCode.Migrations
                     b.ToTable("tb_roles");
                 });
 
+            modelBuilder.Entity("TugasAkhir_VsCode.Models.Transaction", b =>
+                {
+                    b.Property<string>("id_transaksi")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("alamat_lengkap")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("kota")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("nama_pelanggan")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("no_telp")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("provinsi")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("status_bayar")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("status_pemesanan")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("tanggal_pemesanan")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("total")
+                        .HasColumnType("int");
+
+                    b.Property<int>("total_bayar")
+                        .HasColumnType("int");
+
+                    b.HasKey("id_transaksi");
+
+                    b.ToTable("tb_pemesanan");
+                });
+
+            modelBuilder.Entity("TugasAkhir_VsCode.Models.TransactionItems", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("ItemsKode_barang")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("id_transactionid_transaksi")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<int>("jumlah_barang")
+                        .HasColumnType("int");
+
+                    b.Property<int>("total_barang")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ItemsKode_barang");
+
+                    b.HasIndex("id_transactionid_transaksi");
+
+                    b.ToTable("tb_pemesanan_item");
+                });
+
             modelBuilder.Entity("TugasAkhir_VsCode.Models.Users", b =>
                 {
                     b.Property<string>("UserId")
@@ -112,13 +179,28 @@ namespace TugasAkhir_VsCode.Migrations
                         new
                         {
                             UserId = "U0001",
-                            BgEffDate = new DateTime(2024, 2, 2, 20, 3, 26, 154, DateTimeKind.Local).AddTicks(7145),
+                            BgEffDate = new DateTime(2024, 6, 18, 0, 16, 51, 413, DateTimeKind.Local).AddTicks(1754),
                             Name = "Administrator",
                             Password = "Admin2024",
                             Role_User = "Admin",
                             Status = "0",
                             Username = "admin"
                         });
+                });
+
+            modelBuilder.Entity("TugasAkhir_VsCode.Models.TransactionItems", b =>
+                {
+                    b.HasOne("TugasAkhir_VsCode.Models.Items", "Items")
+                        .WithMany()
+                        .HasForeignKey("ItemsKode_barang");
+
+                    b.HasOne("TugasAkhir_VsCode.Models.Transaction", "id_transaction")
+                        .WithMany()
+                        .HasForeignKey("id_transactionid_transaksi");
+
+                    b.Navigation("Items");
+
+                    b.Navigation("id_transaction");
                 });
 #pragma warning restore 612, 618
         }

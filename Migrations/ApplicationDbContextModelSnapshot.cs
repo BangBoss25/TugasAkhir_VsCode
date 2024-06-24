@@ -19,37 +19,6 @@ namespace TugasAkhir_VsCode.Migrations
                 .HasAnnotation("ProductVersion", "8.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("TugasAkhir_VsCode.Models.Booking", b =>
-                {
-                    b.Property<string>("VNOPSN")
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<string>("VKAB")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("VLOC")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("VNAME")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("VNOTELP")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("VPROV")
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime>("VPSNDate")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("VSTAT")
-                        .HasColumnType("longtext");
-
-                    b.HasKey("VNOPSN");
-
-                    b.ToTable("tb_bookings");
-                });
-
             modelBuilder.Entity("TugasAkhir_VsCode.Models.Items", b =>
                 {
                     b.Property<string>("Kode_barang")
@@ -132,10 +101,16 @@ namespace TugasAkhir_VsCode.Migrations
                     b.Property<string>("status_bayar")
                         .HasColumnType("longtext");
 
+                    b.Property<string>("status_pemesanan")
+                        .HasColumnType("longtext");
+
                     b.Property<DateTime>("tanggal_pemesanan")
                         .HasColumnType("datetime(6)");
 
                     b.Property<int>("total")
+                        .HasColumnType("int");
+
+                    b.Property<int>("total_bayar")
                         .HasColumnType("int");
 
                     b.HasKey("id_transaksi");
@@ -149,7 +124,7 @@ namespace TugasAkhir_VsCode.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("id_barangKode_barang")
+                    b.Property<string>("ItemsKode_barang")
                         .HasColumnType("varchar(255)");
 
                     b.Property<string>("id_transactionid_transaksi")
@@ -163,7 +138,7 @@ namespace TugasAkhir_VsCode.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("id_barangKode_barang");
+                    b.HasIndex("ItemsKode_barang");
 
                     b.HasIndex("id_transactionid_transaksi");
 
@@ -201,7 +176,7 @@ namespace TugasAkhir_VsCode.Migrations
                         new
                         {
                             UserId = "U0001",
-                            BgEffDate = new DateTime(2024, 6, 13, 21, 55, 8, 825, DateTimeKind.Local).AddTicks(6198),
+                            BgEffDate = new DateTime(2024, 6, 18, 0, 16, 51, 413, DateTimeKind.Local).AddTicks(1754),
                             Name = "Administrator",
                             Password = "Admin2024",
                             Role_User = "Admin",
@@ -212,15 +187,15 @@ namespace TugasAkhir_VsCode.Migrations
 
             modelBuilder.Entity("TugasAkhir_VsCode.Models.TransactionItems", b =>
                 {
-                    b.HasOne("TugasAkhir_VsCode.Models.Items", "id_barang")
+                    b.HasOne("TugasAkhir_VsCode.Models.Items", "Items")
                         .WithMany()
-                        .HasForeignKey("id_barangKode_barang");
+                        .HasForeignKey("ItemsKode_barang");
 
                     b.HasOne("TugasAkhir_VsCode.Models.Transaction", "id_transaction")
                         .WithMany()
                         .HasForeignKey("id_transactionid_transaksi");
 
-                    b.Navigation("id_barang");
+                    b.Navigation("Items");
 
                     b.Navigation("id_transaction");
                 });

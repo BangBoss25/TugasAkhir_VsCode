@@ -1,4 +1,4 @@
-@{
+﻿@{
     Layout = "_LayoutUtama";
 }
 
@@ -39,15 +39,39 @@
     </nav>
 </div>
 
-<div style="text-align: right;">
-    <a asp-action="AddBooking" class="btn btn-primary mr-2">
-        <i class="bi bi-plus-circle-fill"></i> Add New Item
-    </a>
+<div class="card">
+    <div class="card-body">
+        <form id="filterForm" method="post">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label" for="startDate">Periode</label>
+                        <div class="col-sm-8">
+                            <input type="date" class="form-control" id="startDate" value="">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group row">
+                        <div class="col-sm-8">
+                            <input type="date" class="form-control" id="endDate" value="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <button type="submit" id="btnFilterSubmit" onclick="loadDataTable();" class="btn btn-primary mr-2">
+                    <i class="bi bi-search"></i>
+                    Search
+                </button>
+            </div>
+        </form>
+    </div>
 </div>
 
 <div class="card" style="margin-top: 10px;">
     <div class="dataTables_wrapper pt-2">
-        <table id="tblPemesanan" class="table table-striped project-orders-table">
+        <table id="tblLaporanPemesanan" class="table table-striped project-orders-table">
             <thead>
                 <tr>
                     <th>No. Pesanan</th>
@@ -60,7 +84,6 @@
                 </tr>
             </thead>
             <tbody id="bodyTblPemesanan">
-                
             </tbody>
         </table>
     </div>
@@ -70,14 +93,31 @@
 
 @section Scripts {
     <script>
-        const orderTable = document.getElementById("tblPemesanan");
+        const orderTable = document.getElementById("tblLaporanPemesanan");
+        var startDateInput = document.getElementById('startDate');
+        var endDateInput = document.getElementById('endDate');
 
-        loadDataTable();
+        document.addEventListener('DOMContentLoaded', function () {
+
+            var today = new Date();
+            var firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+
+            var formatDate = function (date) {
+                var day = ("0" + date.getDate()).slice(-2);
+                var month = ("0" + (date.getMonth() + 1)).slice(-2);
+                return date.getFullYear() + "-" + month + "-" + day;
+            };
+
+            startDateInput.value = formatDate(firstDayOfMonth);
+            endDateInput.value = formatDate(today);
+
+            loadDataTable();
+        });
 
         (function ($) {
             'use strict';
             $(function () {
-                $('#tblPemesanan').DataTable({
+                $('#tblLaporanPemesanan').DataTable({
                     "aLengthMenu": [
                         [5, 10, 25, -1],
                         [5, 10, 25, "All"]
@@ -94,7 +134,7 @@
                     // "scrollX": true,
                     "order": [[1, 'asc']]
                 });
-                $('#tblPemesanan').each(function () {
+                $('#tblLaporanPemesanan').each(function () {
                     var datatable = $(this);
                     // SEARCH - Add the placeholder for Search and Turn this into in-line form control
                     var search_input = datatable.closest('.dataTables_wrapper').find('div[id$=_filter] input');
@@ -109,15 +149,27 @@
                 $('#btnMinimize').click();
             });
         })(jQuery);
-  
+
         function loadDataTable() {
             var bodyTable = document.getElementById("bodyTblPemesanan");
+            var startDateInput = document.getElementById('startDate');
+            var endDateInput = document.getElementById('endDate');
+
             var html = "";
 
-            var data = [];
+            var startDateValue = startDateInput.value;
+            var endDateValue = endDateInput.value;
+
+            console.log('Start Date:', startDateValue);
+            console.log('End Date:', endDateValue);
+
+            var data = {
+                startDate: $('#startDate').val(),
+                endDate: $('#endDate').val()
+            };
 
             $.ajax({
-                url: '/Admin/Shop/data-load',
+                url: '/Owner/Shop/data-load',
                 type: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify(data),
@@ -128,40 +180,40 @@
                         for (let i = 0; i < data.length; i++) {
                             var tamp = data[i];
                             html +=
-                            "<tr>" +
+                                "<tr>" +
                                 "<td>" + tamp.id_transaksi + "</td>" +
                                 "<td>" + convertToDDMMYYYY(tamp.tanggal_pemesanan) + "</td>" +
                                 "<td>" + tamp.nama_pelanggan + "</td>" +
                                 "<td style='text-align: right'>" + formatRupiah(tamp.total, 'Rp. ') + "</td>";
 
-                                if (tamp.status_bayar == "Lunas") {
-                                    html +=
-                                        "<td style='text-align: center;' >" +
-                                        "<label class='badge badge-success'>" + tamp.status_bayar + "</label>" +
-                                        "</td>";
-                                }
-                                else {
-                                    html +=
-                                        "<td style='text-align: center;' >" +
-                                        "<label class='badge badge-danger'>Belum Lunas</label>" +
-                                        "</td>";
-                                }
-
+                            if (tamp.status_bayar == "Lunas") {
                                 html +=
+                                    "<td style='text-align: center;' >" +
+                                    "<label class='badge badge-success'>" + tamp.status_bayar + "</label>" +
+                                    "</td>";
+                            }
+                            else {
+                                html +=
+                                    "<td style='text-align: center;' >" +
+                                    "<label class='badge badge-danger'>Belum Lunas</label>" +
+                                    "</td>";
+                            }
+
+                            html +=
                                 "<td style='text-align: center'>" +
                                 "<label class='badge badge-success'>" + tamp.status_pemesanan + "</label>" +
                                 "</td>" +
-                                "<td>" + 
-                                    "<div class='d-flex align-items-center' style='justify-content: center;'>" +
-                                    "<a href=/Admin/Shop/DetailBooking/" + tamp.id_transaksi + " title='Detail' style='font-size: 20px;'>" +
-                                            "<i class='typcn typcn-th-list-outline'></i>" +
-                                        "</a>" +
-                                    "</div>" +
+                                "<td>" +
+                                "<div class='d-flex align-items-center' style='justify-content: center;'>" +
+                                "<a href=/Admin/Shop/DetailBooking/" + tamp.id_transaksi + " title='Detail' style='font-size: 20px;'>" +
+                                "<i class='typcn typcn-th-list-outline'></i>" +
+                                "</a>" +
+                                "</div>" +
                                 "</td>" +
-                            "</tr>";
+                                "</tr>";
 
                         }
-                        
+
                         bodyTable.innerHTML = html;
                     }
                 },
